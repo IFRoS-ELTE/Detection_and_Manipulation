@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  # This defines the name of the service. make sure to change it to your own name
+  ros1_vision_service:
+    # This is the name of the image that will be used to build the container. "." means the Dockerfile is in the same directory as the docker-compose.yml file
+    build: .
+    image: ros1_vision:latest
+    container_name: ros1_vision
+    #user: "1000:1000"  # Specify the user and group ID or name
+    # network_mode:"host" means the container uses the host network for networking - no need to expose ports or define IP addresses
+    network_mode: "host"
+    # Privileged mode enables the container to access the host's devices like USB ports
+    privileged: true
+    # The volumes section defines which directories are shared between the host and the container. The first path is the host path, the second path is the path inside the container
+    volumes:
+      - ../src:/root/ros_ws/src
+    # tty:true enables the container to display GUIs
+    tty: true
+    # The environment section defines environment variables that are passed to the container. DISPLAY is required for GUIs to work
+    environment:
+      - DISPLAY
+    entrypoint: ["tail", "-f", "/dev/null"]
